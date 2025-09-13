@@ -9,7 +9,7 @@ public class Statement {
     private BigDecimal amount;
     private Seller seller;
     private String description;
-    private List<StatementItem> items;
+    private List<StatementItem> statementItems;
     private StamentStatus status;
 
     public String getReference() {
@@ -44,12 +44,12 @@ public class Statement {
         this.description = description;
     }
 
-    public List<StatementItem> getItems() {
-        return items;
+    public List<StatementItem> getStatementItems() {
+        return statementItems;
     }
 
-    public void setItems(List<StatementItem> items) {
-        this.items = items;
+    public void setStatementItems(List<StatementItem> statementItems) {
+        this.statementItems = statementItems;
     }
 
     public StamentStatus getStatus() {

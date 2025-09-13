@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 public class Item {
 
     private String description;
-    private BigDecimal price;
     private String name;
     private BigDecimal value;
 
@@ -15,14 +14,6 @@ public class Item {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
     }
 
     public String getName() {

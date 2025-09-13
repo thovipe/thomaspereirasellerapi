@@ -1,0 +1,12 @@
+Calculo de Fatura
+RF001-01 Calculo de fatura mensal não pode ter item com valor zerado, ou quantidade null ou quantidade zerada.
+
+RF001-02 Toda fatura precisa ter um Seller associado.
+
+RF001-03 Calculo de fatura nao pode ser negativo, retornar Exceção
+
+RF001-03 Itens não cobrados devem ser reduzidos da fatura mensal.
+
+RF001-04 Uma fatura precisa ter uma referencia valida.
+
+RF001-05 O valor de um item não pode ser negativo.
