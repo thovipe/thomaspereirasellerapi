@@ -1,9 +1,8 @@
 package br.edu.infnet.thomaspereirasellerapi;
 
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Item;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Seller;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementItem;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.*;
+import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidItemValueException;
+import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidMonthReferenceException;
 import br.edu.infnet.thomaspereirasellerapi.model.service.StatementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,11 +30,11 @@ class StatementServiceTest {
         Statement statement = new Statement();
         Item item = new Item();
         StatementItem statementItem = new StatementItem();
-        statementItem.setItems(Arrays.asList(item));
         item.setValue(BigDecimal.ZERO);
+        statementItem.setItems(Arrays.asList(item));
+        statement.setStatementItems(Arrays.asList(statementItem));
 
-        assertNotNull(item.getValue(), "Item value can not be null");
-        assertNotEquals(BigDecimal.ZERO, item.getValue(), "Item value can not be Zero");
+        assertThrows(InvalidItemValueException.class, () -> statementService.monthlyStamentCalculation(statement));
     }
 
     @Test
@@ -54,7 +53,6 @@ class StatementServiceTest {
     @DisplayName("RF001-02 Toda fatura precisa ter um Seller associado.")
     void shouldCalcMonthStatement_whenSellerNull() {
         Statement statement = new Statement();
-        Seller seller = null;
         Item item = new Item();
         item.setValue(new BigDecimal("100.00"));
         item.setName("Test item");
@@ -62,7 +60,6 @@ class StatementServiceTest {
         StatementItem statementItem = new StatementItem();
         statementItem.setItems(Arrays.asList(item));
         statementItem.setQuantity(1);
-        statement.setSeller(seller);
         statement.setStatementItems(Arrays.asList(statementItem));
 
         assertInstanceOf(Seller.class, statement.getSeller(), "Seller should be instance of Seller");
@@ -86,7 +83,69 @@ class StatementServiceTest {
         statement.setStatementItems(Arrays.asList(statementItem));
 
         assertThrows(InvalidParameterException.class, () -> statementService.monthlyStamentCalculation(statement), "Calculation can not be negative.");
+    }
 
+    @Test
+    @DisplayName("RF001-04 Itens não cobrados devem ser reduzidos da fatura mensal.")
+    void shouldCalcMonthStatementNonBillable() {
+        Statement statement = new Statement();
+        Seller seller = new Seller();
+        seller.setName("Test seller");
+        seller.setCnpj("123456789");
+        Item item = new Item();
+        item.setValue(new BigDecimal("100.00"));
+        item.setName("Test item");
+        item.setDescription("Test description");
+        StatementItem statementItem = new StatementItem();
+        statementItem.setItems(Arrays.asList(item));
+        statementItem.setBillable(false);
+        statementItem.setQuantity(1);
+        statement.setSeller(seller);
+        statement.setStatementItems(Arrays.asList(statementItem));
+
+        assertEquals(BigDecimal.ZERO, statementService.monthlyStamentCalculation(statement), "Seller should not be charged.");
+    }
+
+    @Test
+    @DisplayName("RF001-05 Uma fatura precisa ter uma referencia valida.")
+    void shouldCalcMonthStatementValidReference_whenCreated() {
+        Statement statement = new Statement();
+        Seller seller = new Seller();
+        seller.setName("Test seller");
+        seller.setCnpj("123456789");
+        Item item = new Item();
+        item.setValue(new BigDecimal("100.00"));
+        item.setName("Test item");
+        item.setDescription("Test description");
+        StatementItem statementItem = new StatementItem();
+        statementItem.setItems(Arrays.asList(item));
+        statementItem.setBillable(false);
+        statementItem.setQuantity(1);
+        statement.setReference(null);
+        statement.setSeller(seller);
+        statement.setStatementItems(Arrays.asList(statementItem));
+
+        assertInstanceOf(MonthReference.class, statement.getReference(), "Reference should be instance of MonthReference");
+        assertThrows(InvalidMonthReferenceException.class, () -> statementService.monthlyStamentCalculation(statement));
+    }
+
+    @Test
+    @DisplayName("RF001-06 O valor de um item não pode ser negativo.")
+    void shouldCalcMonthStatementNonNegativeItemValue(){
+        Statement statement = new Statement();
+        Seller seller = new Seller();
+        seller.setName("Test seller");
+        seller.setCnpj("123456789");
+        Item item = new Item();
+        item.setValue(new BigDecimal("-10.00"));
+        item.setName("Test item");
+        item.setDescription("Test description");
+        StatementItem statementItem = new StatementItem();
+        statementItem.setItems(Arrays.asList(item));
+
+        statementService.monthlyStamentCalculation(statement);
+
+        assertThrows(InvalidItemValueException.class, () -> statementService.monthlyStamentCalculation(statement));
     }
 
 }

@@ -5,8 +5,8 @@ RF001-02 Toda fatura precisa ter um Seller associado.
 
 RF001-03 Calculo de fatura nao pode ser negativo, retornar Exceção
 
-RF001-03 Itens não cobrados devem ser reduzidos da fatura mensal.
+RF001-04 Itens não cobrados devem ser reduzidos da fatura mensal.
 
-RF001-04 Uma fatura precisa ter uma referencia valida.
+RF001-05 Uma fatura precisa ter uma referencia valida.
 
-RF001-05 O valor de um item não pode ser negativo.
+RF001-06 O valor de um item não pode ser negativo.

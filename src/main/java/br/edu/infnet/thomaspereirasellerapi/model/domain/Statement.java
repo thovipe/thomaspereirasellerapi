@@ -5,18 +5,18 @@ import java.util.List;
 
 public class Statement {
 
-    private String reference;
+    private MonthReference reference;
     private BigDecimal amount;
     private Seller seller;
     private String description;
     private List<StatementItem> statementItems;
     private StamentStatus status;
 
-    public String getReference() {
+    public MonthReference getReference() {
         return reference;
     }
 
-    public void setReference(String reference) {
+    public void setReference(MonthReference reference) {
         this.reference = reference;
     }
 
