@@ -7,6 +7,8 @@ import java.math.BigDecimal;
 
 public class StatementService {
 
+
+
     public BigDecimal monthlyStamentCalculation(Statement statement)
     {
        statement.getStatementItems().forEach(statementItem -> {
@@ -17,6 +19,8 @@ public class StatementService {
                }
            });
        });
+
+
        return BigDecimal.ZERO;
     }
 

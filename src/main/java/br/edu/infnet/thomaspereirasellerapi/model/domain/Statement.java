@@ -1,6 +1,7 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Statement {
@@ -11,6 +12,14 @@ public class Statement {
     private String description;
     private List<StatementItem> statementItems;
     private StamentStatus status;
+
+    Statement(BigDecimal amount, Seller seller) {
+        this.reference = MonthReference.JANUARY;
+        this.amount = amount;
+        this.seller = seller;
+        this.status = StamentStatus.PENDING;
+    }
+
 
     public MonthReference getReference() {
         return reference;
