@@ -13,7 +13,7 @@ public class Statement {
     private List<StatementItem> statementItems;
     private StamentStatus status;
 
-    Statement(BigDecimal amount, Seller seller) {
+    public Statement(Seller seller, BigDecimal amount) {
         this.reference = MonthReference.JANUARY;
         this.amount = amount;
         this.seller = seller;
