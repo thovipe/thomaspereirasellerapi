@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -125,5 +126,28 @@ class StatementServiceTest {
 
         assertThrows(InvalidItemValueException.class, () -> statementService.monthlyStatementCalculation(statement));
     }
+
+    @Test
+    @DisplayName("RF001-07 Validar Calculo de fatura com mais de um item.")
+    void shouldCalcMonthStatement_whenMoreThanOneItem() {
+        ArrayList<StatementItem> statementItems = new ArrayList<>();
+        seller.setName("Test seller");
+        seller.setCnpj("123456789");
+        statementItem.setValue(new BigDecimal("10.00"));
+        statementItem.setName("Test item");
+        statementItem.setDescription("Test description");
+        StatementItem newStatementItem = new StatementItem("CDP02",true);
+        newStatementItem.setQuantity(2);
+        newStatementItem.setValue(new BigDecimal("10.00"));
+        newStatementItem.setName("Test item 2");
+        newStatementItem.setDescription("Test description 2");
+        statementItems.add(newStatementItem);
+        statementItems.add(statementItem);
+        statement.setStatementItems(statementItems);
+        BigDecimal expectedValue = new BigDecimal("30.00");
+
+        assertEquals(expectedValue, statementService.monthlyStatementCalculation(statement));
+    }
+
 
 }

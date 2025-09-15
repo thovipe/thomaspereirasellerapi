@@ -10,3 +10,5 @@ RF001-04 Itens não cobrados devem ser reduzidos da fatura mensal.
 RF001-05 Uma fatura precisa ter uma referencia valida.
 
 RF001-06 O valor de um item não pode ser negativo.
+
+RF001-07 Validar Calculo de fatura com mais de um item.

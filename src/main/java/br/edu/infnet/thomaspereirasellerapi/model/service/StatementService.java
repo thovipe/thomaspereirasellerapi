@@ -34,20 +34,19 @@ public class StatementService {
            }
        });
 
-
        if (statement.getReference() == null) {
            throw new InvalidMonthReferenceException("Month reference can not be null.");
        }
 
-        AtomicReference<BigDecimal> calc = new AtomicReference<>(BigDecimal.ZERO);
+        AtomicReference<BigDecimal> test = new AtomicReference<>(BigDecimal.ZERO);
         statement.getStatementItems().forEach(statementItem -> {
             if(statementItem.isBillable()) {
-                calc.set(statementItem.getValue().multiply(BigDecimal.valueOf(statementItem.getQuantity())));
+               test.set(statement.getStatementItems().stream().map(item -> item.getValue().multiply(BigDecimal.valueOf(item.getQuantity())))
+                        .reduce(BigDecimal.ZERO, BigDecimal::add));
             }
         });
 
-
-       return calc.get();
+       return test.get();
     }
 
     // TODO Create a method for applying discounts it calls monthlyStatementCalculation and applies a discount received as parameter
