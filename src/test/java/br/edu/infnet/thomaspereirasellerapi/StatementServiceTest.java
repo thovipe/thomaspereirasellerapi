@@ -8,9 +8,7 @@ import br.edu.infnet.thomaspereirasellerapi.model.service.StatementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -149,5 +147,44 @@ class StatementServiceTest {
         assertEquals(expectedValue, statementService.monthlyStatementCalculation(statement));
     }
 
+    @Test
+    @DisplayName("RF001-08 Se o statement estiver atrasado o monthlyStatementWithDiscountCalculation deve retornar zero.")
+    void shouldCalcMonthStatement_whenStatusOverdue() {
+        BigDecimal calculatedValue = null;
+        statement.setStatus(StamentStatus.OVERDUE);
+
+        if (statement.getStatus() == StamentStatus.OVERDUE) {
+            calculatedValue = statementService.monthlyStatementWithDiscountCalculation(statement, 10);
+        }
+
+        assertEquals(BigDecimal.ZERO, calculatedValue, "O metodo deve retornar ZERO para statements com status OVERDUE.");
+    }
+
+    @Test
+    @DisplayName("RF001-09 O calculo monthlyStatementWithDiscountCalculation deve dar no máximo 30 por cento de desconto.")
+    void shouldCalcMonthStatement_whenMax30PercentDiscount() {
+        BigDecimal calculatedValue = null;
+        ArrayList<StatementItem> statementItems = new ArrayList<>();
+        seller.setName("Test seller");
+        seller.setCnpj("123456789");
+        statementItem.setValue(new BigDecimal("10.00"));
+        statementItem.setName("Test item");
+        statementItem.setDescription("Test description");
+        StatementItem newStatementItem = new StatementItem("CDP02",true);
+        newStatementItem.setQuantity(2);
+        newStatementItem.setValue(new BigDecimal("10.00"));
+        newStatementItem.setName("Test item 2");
+        newStatementItem.setDescription("Test description 2");
+        statementItems.add(newStatementItem);
+        statementItems.add(statementItem);
+        statement.setStatementItems(statementItems);
+        BigDecimal expectedValue = new BigDecimal("21.00");
+
+        if (statement.getStatus() != StamentStatus.OVERDUE) {
+            calculatedValue = statementService.monthlyStatementWithDiscountCalculation(statement, 50);
+        }
+
+        assertEquals(expectedValue, calculatedValue, "O calculo monthlyStatementWithDiscountCalculation deve dar no máximo 30 por cento de desconto.");
+    }
 
 }

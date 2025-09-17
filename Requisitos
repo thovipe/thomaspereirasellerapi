@@ -12,3 +12,7 @@ RF001-05 Uma fatura precisa ter uma referencia valida.
 RF001-06 O valor de um item não pode ser negativo.
 
 RF001-07 Validar Calculo de fatura com mais de um item.
+
+RF001-08 Se o statement estiver atrasado o monthlyStatementWithDiscountCalculation deve retornar zero.
+
+RF001-09 O calculo monthlyStatementWithDiscountCalculation deve dar no máximo 30 por cento de desconto

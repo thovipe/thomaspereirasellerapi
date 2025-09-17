@@ -50,4 +50,8 @@ public class StatementService {
     }
 
     // TODO Create a method for applying discounts it calls monthlyStatementCalculation and applies a discount received as parameter
+    public BigDecimal monthlyStatementWithDiscountCalculation(Statement statement, Integer discount) {
+        return null;
+    }
+
 }
