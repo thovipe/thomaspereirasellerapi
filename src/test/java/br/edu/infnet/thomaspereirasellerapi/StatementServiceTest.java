@@ -151,9 +151,9 @@ class StatementServiceTest {
     @DisplayName("RF001-08 Se o statement estiver atrasado o monthlyStatementWithDiscountCalculation deve retornar zero.")
     void shouldCalcMonthStatement_whenStatusOverdue() {
         BigDecimal calculatedValue = null;
-        statement.setStatus(StamentStatus.OVERDUE);
+        statement.setStatus(StatementStatus.OVERDUE);
 
-        if (statement.getStatus() == StamentStatus.OVERDUE) {
+        if (statement.getStatus() == StatementStatus.OVERDUE) {
             calculatedValue = statementService.monthlyStatementWithDiscountCalculation(statement, 10);
         }
 
@@ -180,7 +180,7 @@ class StatementServiceTest {
         statement.setStatementItems(statementItems);
         BigDecimal expectedValue = new BigDecimal("21.00");
 
-        if (statement.getStatus() != StamentStatus.OVERDUE) {
+        if (statement.getStatus() != StatementStatus.OVERDUE) {
             calculatedValue = statementService.monthlyStatementWithDiscountCalculation(statement, 50);
         }
 

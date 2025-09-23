@@ -1,6 +1,6 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
-public enum StamentStatus {
+public enum StatementStatus {
 
     PENDING,
     PAYMENT_CONFIRMED,

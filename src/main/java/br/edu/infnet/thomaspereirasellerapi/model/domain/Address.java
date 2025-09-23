@@ -1,11 +1,23 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+
+@Entity
 public class Address {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank(message = "Street Name is a mandatory field.")
     private String streetName;
     private String district;
     private String city;
     private String state;
+    @NotBlank(message = "ZipCode is a mandatory field.")
     private String zipCode;
     private String country;
     private String complement;

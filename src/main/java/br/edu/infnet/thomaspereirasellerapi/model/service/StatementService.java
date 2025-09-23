@@ -13,8 +13,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class StatementService {
 
-
-
     public BigDecimal monthlyStatementCalculation(Statement statement)
     {
        statement.getStatementItems().forEach(statementItem -> {
@@ -41,15 +39,15 @@ public class StatementService {
            throw new InvalidMonthReferenceException("Month reference can not be null.");
        }
 
-        AtomicReference<BigDecimal> test = new AtomicReference<>(BigDecimal.ZERO);
+        AtomicReference<BigDecimal> statementFullAmount = new AtomicReference<>(BigDecimal.ZERO);
         statement.getStatementItems().forEach(statementItem -> {
             if(statementItem.isBillable()) {
-               test.set(statement.getStatementItems().stream().map(item -> item.getValue().multiply(BigDecimal.valueOf(item.getQuantity())))
+                statementFullAmount.set(statement.getStatementItems().stream().map(item -> item.getValue().multiply(BigDecimal.valueOf(item.getQuantity())))
                         .reduce(BigDecimal.ZERO, BigDecimal::add));
             }
         });
 
-       return test.get();
+       return statementFullAmount.get();
     }
 
     public BigDecimal monthlyStatementWithDiscountCalculation(Statement statement, Integer discount) {
@@ -65,8 +63,8 @@ public class StatementService {
 
        if(discount <= 30)  {
             BigDecimal statementWithoutDiscount = monthlyStatementCalculation(statement);
-            BigDecimal dicountValue = statementWithoutDiscount.multiply(BigDecimal.valueOf(discount));
-            finalStatementValue = dicountValue.divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
+            BigDecimal discountValue = statementWithoutDiscount.multiply(BigDecimal.valueOf(discount));
+            finalStatementValue = discountValue.divide(BigDecimal.valueOf(100), RoundingMode.HALF_UP);
             finalStatementValue = statementWithoutDiscount.subtract(finalStatementValue);
             return finalStatementValue;
         } else {

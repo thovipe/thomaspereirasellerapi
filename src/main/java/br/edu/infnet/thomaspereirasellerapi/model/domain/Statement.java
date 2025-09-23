@@ -1,23 +1,21 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Statement {
 
     private MonthReference reference;
-    private BigDecimal amount;
+
     private Seller seller;
     private String description;
     private List<StatementItem> statementItems;
-    private StamentStatus status;
+    private StatementStatus status;
 
     public Statement(Seller seller, BigDecimal amount) {
         this.reference = MonthReference.JANUARY;
-        this.amount = amount;
         this.seller = seller;
-        this.status = StamentStatus.PENDING;
+        this.status = StatementStatus.PENDING;
     }
 
 
@@ -27,14 +25,6 @@ public class Statement {
 
     public void setReference(MonthReference reference) {
         this.reference = reference;
-    }
-
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
     }
 
     public Seller getSeller() {
@@ -61,11 +51,11 @@ public class Statement {
         this.statementItems = statementItems;
     }
 
-    public StamentStatus getStatus() {
+    public StatementStatus getStatus() {
         return status;
     }
 
-    public void setStatus(StamentStatus status) {
+    public void setStatus(StatementStatus status) {
         this.status = status;
     }
 }
