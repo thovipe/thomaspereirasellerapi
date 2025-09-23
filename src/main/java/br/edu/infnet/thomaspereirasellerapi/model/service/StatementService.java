@@ -1,6 +1,6 @@
 package br.edu.infnet.thomaspereirasellerapi.model.service;
 
-import br.edu.infnet.thomaspereirasellerapi.model.domain.StamentStatus;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementStatus;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidItemValueException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidMonthReferenceException;
@@ -54,7 +54,7 @@ public class StatementService {
 
         BigDecimal finalStatementValue = BigDecimal.ZERO;
 
-        if(statement.getStatus() == StamentStatus.OVERDUE) {
+        if(statement.getStatus() == StatementStatus.OVERDUE) {
             return finalStatementValue;
         }
         if( discount == null || discount <= 0 ) {
