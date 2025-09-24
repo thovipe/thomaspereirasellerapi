@@ -1,17 +1,31 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 
+import java.math.BigDecimal;
+
+@Entity
 public class StatementItem {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @NotBlank(message="Code is a mandatory field.")
     private String code;
     private Integer quantity;
     private boolean billable;
     private String description;
+    @NotBlank(message="Name is a mandatory field.")
     private String name;
     private BigDecimal value;
+
+    public StatementItem() {
+
+    }
 
     public String getDescription() {
         return description;

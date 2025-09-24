@@ -1,10 +1,27 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
+@Entity
 public class CreditCardData {
 
+      @Id
+      @GeneratedValue(strategy = GenerationType.IDENTITY)
+      private Long id;
+      @NotBlank(message="Credit Card Number is a mandatory field.")
       private String cardCreditNumber;
+      @NotBlank(message="Holder name is a mandatory field.")
       private String holderName;
       private String expirationDate;
+      @NotBlank(message = "Security code is mandatory field.")
+      @Max(5)
+      @Min(3)
       private String securityCode;
       private String brand;
 

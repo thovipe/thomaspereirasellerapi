@@ -1,15 +1,34 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@Entity
 public class StatementPayment {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Valid
+    @ManyToOne
     private Seller seller;
     private BigDecimal statementAmount;
+    @ManyToOne
     private Statement statement;
     private LocalDateTime paymentDate;
+    @ManyToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY, optional = false)
     private CreditCardData creditCard;
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Seller getSeller() {
         return this.seller;

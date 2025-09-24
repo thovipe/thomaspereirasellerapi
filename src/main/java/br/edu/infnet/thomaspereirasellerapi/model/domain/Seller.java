@@ -22,6 +22,14 @@ public class Seller {
     @NotBlank(message="CNPJ is mandatory field.")
     private String cnpj;
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

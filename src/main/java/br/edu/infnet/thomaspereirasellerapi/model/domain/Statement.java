@@ -1,15 +1,26 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
+
 import java.math.BigDecimal;
 import java.util.List;
 
+@Entity
 public class Statement {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Enumerated(EnumType.STRING)
     private MonthReference reference;
-
+    @Valid
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Seller seller;
     private String description;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<StatementItem> statementItems;
+    @Enumerated(EnumType.STRING)
     private StatementStatus status;
 
     public Statement(Seller seller, BigDecimal amount) {
@@ -18,6 +29,17 @@ public class Statement {
         this.status = StatementStatus.PENDING;
     }
 
+    public Statement() {
+
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public MonthReference getReference() {
         return reference;
