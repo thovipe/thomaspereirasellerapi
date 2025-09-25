@@ -1,9 +1,6 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import java.math.BigDecimal;
@@ -15,13 +12,13 @@ public class StatementItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank(message="Code is a mandatory field.")
-    private String code;
-    private Integer quantity;
-    private boolean billable;
+    private String itemCode;
+    private Integer itemQuantity;
+    private Boolean isBillable;
     private String description;
     @NotBlank(message="Name is a mandatory field.")
-    private String name;
-    private BigDecimal value;
+    private String itemName;
+    private BigDecimal itemValue;
 
     public StatementItem() {
 
@@ -35,49 +32,49 @@ public class StatementItem {
         this.description = description;
     }
 
-    public String getName() {
-        return name;
+    public String getItemName() {
+        return this.itemName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setItemName(String itemName) {
+        this.itemName = itemName;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public BigDecimal getItemValue() {
+        return itemValue;
     }
 
-    public void setValue(BigDecimal value) {
-        this.value = value;
+    public void setItemValue(BigDecimal itemValue) {
+        this.itemValue = itemValue;
     }
 
-    public StatementItem(String code, boolean billable) {
-        this.code = code;
-        this.quantity = 1;
-        this.billable = billable;
+    public StatementItem(String itemCode, Boolean isBillable) {
+        this.itemCode = itemCode;
+        this.itemQuantity = 1;
+        this.isBillable = isBillable;
     }
 
-    public String getCode() {
-        return code;
+    public String getItemCode() {
+        return this.itemCode;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
     }
 
-    public Integer getQuantity() {
-        return quantity;
+    public Integer getItemQuantity() {
+        return itemQuantity;
     }
 
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
+    public void setItemQuantity(Integer itemQuantity) {
+        this.itemQuantity = itemQuantity;
     }
 
-    public boolean isBillable() {
-        return billable;
+    public Boolean isBillable() {
+        return this.isBillable;
     }
 
-    public void setBillable(boolean billable) {
-        this.billable = billable;
+    public void setIsBillable(Boolean isBillable) {
+        this.isBillable = isBillable;
     }
 }

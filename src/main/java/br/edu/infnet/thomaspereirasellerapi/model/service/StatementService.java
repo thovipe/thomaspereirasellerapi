@@ -5,23 +5,25 @@ import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidItemValueException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidMonthReferenceException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidQuantityItemValueException;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.InvalidParameterException;
 import java.util.concurrent.atomic.AtomicReference;
 
+@Service
 public class StatementService {
 
     public BigDecimal monthlyStatementCalculation(Statement statement)
     {
        statement.getStatementItems().forEach(statementItem -> {
 
-               if(statementItem.getValue().equals(BigDecimal.ZERO) || statementItem.getValue() == null)
+               if(statementItem.getItemValue().equals(BigDecimal.ZERO) || statementItem.getItemValue() == null)
                {
                    throw new InvalidItemValueException ("Value cannot be null or zero.");
                }
-               if(statementItem.getValue().compareTo(BigDecimal.ZERO) < 0)
+               if(statementItem.getItemValue().compareTo(BigDecimal.ZERO) < 0)
                {
                    throw new InvalidItemValueException ("Value cannot be negative.");
                }
@@ -29,7 +31,7 @@ public class StatementService {
        });
 
        statement.getStatementItems().forEach(statementItem -> {
-           if(statementItem.getQuantity() == null || statementItem.getQuantity() == 0)
+           if(statementItem.getItemQuantity() == null || statementItem.getItemQuantity() == 0)
            {
                throw new InvalidQuantityItemValueException("Quantity cannot be null or zero.");
            }
@@ -42,7 +44,7 @@ public class StatementService {
         AtomicReference<BigDecimal> statementFullAmount = new AtomicReference<>(BigDecimal.ZERO);
         statement.getStatementItems().forEach(statementItem -> {
             if(statementItem.isBillable()) {
-                statementFullAmount.set(statement.getStatementItems().stream().map(item -> item.getValue().multiply(BigDecimal.valueOf(item.getQuantity())))
+                statementFullAmount.set(statement.getStatementItems().stream().map(item -> item.getItemValue().multiply(BigDecimal.valueOf(item.getItemQuantity())))
                         .reduce(BigDecimal.ZERO, BigDecimal::add));
             }
         });

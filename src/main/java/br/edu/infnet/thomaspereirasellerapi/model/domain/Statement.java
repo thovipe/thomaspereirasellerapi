@@ -18,7 +18,7 @@ public class Statement {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Seller seller;
     private String description;
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)
     private List<StatementItem> statementItems;
     @Enumerated(EnumType.STRING)
     private StatementStatus status;

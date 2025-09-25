@@ -19,9 +19,11 @@ public class Address {
     private String state;
     @NotBlank(message = "ZipCode is a mandatory field.")
     private String zipCode;
-    private String country;
+    //private String country = "Brasil";
     private String complement;
     private int number;
+
+    public Address() {}
 
     public Long getId() {
         return this.id;
@@ -71,13 +73,13 @@ public class Address {
         this.zipCode = zipCode;
     }
 
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
+//    public String getCountry() {
+//        return country;
+//    }
+//
+//    public void setCountry(String country) {
+//        this.country = country;
+//    }
 
     public String getComplement() {
         return complement;

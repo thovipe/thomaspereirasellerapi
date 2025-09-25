@@ -1,17 +1,18 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain.client;
 
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Address;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value="OpenCep", url="${url.opencep.api}")
-public interface OpenCepFeignClient {
+@FeignClient(value="ViaCep", url="${viacep.url}")
+public interface OpenFeignClientViaCep {
 
-    @GetMapping(value="/{zipCode}")
-    OpenCepAddressResponse getAddress(@PathVariable String zipCode);
+    @GetMapping(value="/{cep}/json")
+    ViaCepResponse getAddressViaCep(@PathVariable String cep);
 
-    class OpenCepAddressResponse {
+
+    class ViaCepResponse {
+
         private String cep;
         private String logradouro;
         private String complemento;
@@ -22,7 +23,9 @@ public interface OpenCepFeignClient {
         private String estado;
         private String regiao;
         private String ibge;
-        private String error;
+        private String gia;
+        private String ddd;
+        private String siafi;
 
         public String getCep() {
             return cep;
@@ -104,13 +107,31 @@ public interface OpenCepFeignClient {
             this.ibge = ibge;
         }
 
-        public String getError() {
-            return this.error;
+        public String getGia() {
+            return gia;
         }
-        public void setErro(String erro) {
-            this.error = error;
+
+        public void setGia(String gia) {
+            this.gia = gia;
+        }
+
+        public String getDdd() {
+            return ddd;
+        }
+
+        public void setDdd(String ddd) {
+            this.ddd = ddd;
+        }
+
+        public String getSiafi() {
+            return siafi;
+        }
+
+        public void setSiafi(String siafi) {
+            this.siafi = siafi;
         }
     }
 
-
 }
+
+

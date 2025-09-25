@@ -4,9 +4,12 @@ import br.edu.infnet.thomaspereirasellerapi.model.domain.Address;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Seller;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.SellerNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.security.InvalidParameterException;
+import java.util.List;
 
 
 @Service
@@ -15,6 +18,19 @@ public class SellerService {
     private final SellerRepository sellerRepository;
     public SellerService(SellerRepository sellerRepository) {
         this.sellerRepository = sellerRepository;
+    }
+
+
+    public Seller getSeller(Long id)  {
+       return sellerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Seller with id %d not found", id)));
+    }
+
+    public List<Seller> getSellers() {
+        return sellerRepository.findAll();
+    }
+
+    public Seller addSeller(Seller seller) {
+        return sellerRepository.save(seller);
     }
 
     public Seller addSeller(String name, String email, Address address, String cnpj) {

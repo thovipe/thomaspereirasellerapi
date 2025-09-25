@@ -17,7 +17,7 @@ public class Seller {
     private String email;
     private boolean isActive;
     @Valid
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false, orphanRemoval = true)
+    @ManyToOne(cascade = CascadeType.ALL,  optional = false)
     private Address address;
     @NotBlank(message="CNPJ is mandatory field.")
     private String cnpj;
