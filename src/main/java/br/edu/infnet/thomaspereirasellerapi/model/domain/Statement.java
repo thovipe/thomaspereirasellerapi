@@ -15,7 +15,7 @@ public class Statement {
     @Enumerated(EnumType.STRING)
     private MonthReference reference;
     @Valid
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Seller seller;
     private String description;
     @OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)
@@ -23,14 +23,14 @@ public class Statement {
     @Enumerated(EnumType.STRING)
     private StatementStatus status;
 
+    public Statement() {
+
+    }
+
     public Statement(Seller seller, BigDecimal amount) {
         this.reference = MonthReference.JANUARY;
         this.seller = seller;
         this.status = StatementStatus.PENDING;
-    }
-
-    public Statement() {
-
     }
 
     public Long getId() {

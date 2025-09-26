@@ -16,7 +16,7 @@ public class StatementPayment {
     @ManyToOne
     private Seller seller;
     private BigDecimal statementAmount;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Statement statement;
     private LocalDateTime paymentDate;
     @ManyToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY, optional = false)

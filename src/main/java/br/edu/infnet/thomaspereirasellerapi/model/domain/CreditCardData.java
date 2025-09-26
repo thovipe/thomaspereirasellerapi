@@ -15,7 +15,7 @@ public class CreditCardData {
       @GeneratedValue(strategy = GenerationType.IDENTITY)
       private Long id;
       @NotBlank(message="Credit Card Number is a mandatory field.")
-      private String cardCreditNumber;
+      private String creditCardNumber;
       @NotBlank(message="Holder name is a mandatory field.")
       private String holderName;
       private String expirationDate;
@@ -25,12 +25,12 @@ public class CreditCardData {
       private String securityCode;
       private String brand;
 
-    public String getCardCreditNumber() {
-        return this.cardCreditNumber;
+    public String getCreditCardNumber() {
+        return this.creditCardNumber;
     }
 
-    public void setCardCreditNumber(String cardCreditNumber) {
-        this.cardCreditNumber = cardCreditNumber;
+    public void setCreditCardNumber(String cardCreditNumber) {
+        this.creditCardNumber = cardCreditNumber;
     }
 
     public String getHolderName() {

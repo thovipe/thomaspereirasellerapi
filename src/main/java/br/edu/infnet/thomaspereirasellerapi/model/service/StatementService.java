@@ -2,18 +2,51 @@ package br.edu.infnet.thomaspereirasellerapi.model.service;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementStatus;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidItemValueException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidMonthReferenceException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidQuantityItemValueException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.InvalidParameterException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class StatementService {
+
+    private final StatementRepository statementRepository;
+
+    public StatementService(StatementRepository statementRepository) {
+        this.statementRepository = statementRepository;
+    }
+
+    public List<Statement> getAllStatements() {
+        return statementRepository.findAll();
+    }
+
+    public Statement getStatement(Long id) {
+        return statementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Statement with id %d not found", id)));
+    }
+
+    public Statement addStatement(Statement statement) {
+        return statementRepository.save(statement);
+    }
+
+    public void deleteStatement(Long id) {
+        if(id == null) {
+            throw new InvalidParameterException("id is null");
+        }
+        if (statementRepository.existsById(id)) {
+            statementRepository.deleteById(id);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Statement with id %d not found", id));
+        }
+    }
 
     public BigDecimal monthlyStatementCalculation(Statement statement)
     {

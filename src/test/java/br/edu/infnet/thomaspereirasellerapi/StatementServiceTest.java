@@ -1,6 +1,7 @@
 package br.edu.infnet.thomaspereirasellerapi;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.*;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidItemValueException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidMonthReferenceException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidQuantityItemValueException;
@@ -20,13 +21,14 @@ class StatementServiceTest {
     private Seller seller;
     private Statement statement;
     private StatementItem statementItem;
+    private StatementRepository statementRepository;
 
     @BeforeEach
     void setUp() {
-        statementService = new StatementService();
         seller = new Seller();
         statement = new Statement(seller, BigDecimal.ZERO);
         statementItem = new StatementItem("CDP01", true);
+        statementService = new StatementService(statementRepository);
     }
 
     @Test
@@ -69,7 +71,7 @@ class StatementServiceTest {
         seller.setName("Test seller");
         seller.setCnpj("123456789");
         statementItem.setItemValue(new BigDecimal("-100.00"));
-        statementItem.setName("Test item");
+        statementItem.setItemName("Test item");
         statementItem.setDescription("Test description");
         statementItem.setItemQuantity(1);
         statement.setSeller(seller);
@@ -85,7 +87,7 @@ class StatementServiceTest {
         seller.setName("Test seller");
         seller.setCnpj("123456789");
         statementItem.setItemValue(new BigDecimal("100.00"));
-        statementItem.setBillable(false);
+        statementItem.setIsBillable(false);
         statementItem.setItemQuantity(1);
         statement.setSeller(seller);
         statement.setStatementItems(Arrays.asList(statementItem));
@@ -100,9 +102,9 @@ class StatementServiceTest {
         seller.setName("Test seller");
         seller.setCnpj("123456789");
         statementItem.setItemValue(new BigDecimal("100.00"));
-        statementItem.setName("Test item");
+        statementItem.setItemName("Test item");
         statementItem.setDescription("Test description");
-        statementItem.setBillable(false);
+        statementItem.setIsBillable(false);
         statementItem.setItemQuantity(1);
         statement.setReference(null);
         statement.setSeller(seller);
@@ -118,7 +120,7 @@ class StatementServiceTest {
         seller.setName("Test seller");
         seller.setCnpj("123456789");
         statementItem.setItemValue(new BigDecimal("-10.00"));
-        statementItem.setName("Test item");
+        statementItem.setItemName("Test item");
         statementItem.setDescription("Test description");
         statement.setStatementItems(Arrays.asList(statementItem));
 
@@ -132,12 +134,12 @@ class StatementServiceTest {
         seller.setName("Test seller");
         seller.setCnpj("123456789");
         statementItem.setItemValue(new BigDecimal("10.00"));
-        statementItem.setName("Test item");
+        statementItem.setItemName("Test item");
         statementItem.setDescription("Test description");
         StatementItem newStatementItem = new StatementItem("CDP02",true);
         newStatementItem.setItemQuantity(2);
         newStatementItem.setItemValue(new BigDecimal("10.00"));
-        newStatementItem.setName("Test item 2");
+        newStatementItem.setItemName("Test item 2");
         newStatementItem.setDescription("Test description 2");
         statementItems.add(newStatementItem);
         statementItems.add(statementItem);
@@ -168,12 +170,12 @@ class StatementServiceTest {
         seller.setName("Test seller");
         seller.setCnpj("123456789");
         statementItem.setItemValue(new BigDecimal("10.00"));
-        statementItem.setName("Test item");
+        statementItem.setItemName("Test item");
         statementItem.setDescription("Test description");
         StatementItem newStatementItem = new StatementItem("CDP02",true);
         newStatementItem.setItemQuantity(2);
         newStatementItem.setItemValue(new BigDecimal("10.00"));
-        newStatementItem.setName("Test item 2");
+        newStatementItem.setItemName("Test item 2");
         newStatementItem.setDescription("Test description 2");
         statementItems.add(newStatementItem);
         statementItems.add(statementItem);

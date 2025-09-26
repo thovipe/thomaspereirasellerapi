@@ -10,10 +10,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value="/sellers")
+@RequestMapping(value="/api/sellers")
 public class SellerController {
 
-    private SellerService sellerService;
+    private final SellerService sellerService;
 
     public SellerController(SellerService sellerService) {
         this.sellerService = sellerService;
