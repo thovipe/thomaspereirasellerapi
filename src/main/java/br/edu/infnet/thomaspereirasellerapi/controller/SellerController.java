@@ -1,6 +1,8 @@
 package br.edu.infnet.thomaspereirasellerapi.controller;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Seller;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.SellerRequestDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.SellerResponseDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.service.SellerService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,29 +22,28 @@ public class SellerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Seller>> getAllSellers() {
+    public ResponseEntity<List<SellerResponseDTO>> getAllSellers() {
         return ResponseEntity.status(HttpStatus.OK).body(sellerService.getSellers());
     }
 
     @GetMapping(value="/{id}")
-    public ResponseEntity<Seller> getSellerById(@PathVariable Long id) {
+    public ResponseEntity<SellerResponseDTO> getSellerById(@PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(sellerService.getSeller(id));
     }
 
     @PostMapping()
-    public ResponseEntity<Seller> addSeller(@Valid @RequestBody Seller seller) {
-        sellerService.addSeller(seller);
-        return ResponseEntity.status(HttpStatus.CREATED).body(seller);
+    public ResponseEntity<SellerResponseDTO> addSeller(@Valid @RequestBody SellerRequestDTO seller) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(sellerService.addSeller(seller));
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<Seller> updateSeller(@Valid @PathVariable Long id, @RequestBody Seller seller) {
+    public ResponseEntity<SellerResponseDTO> updateSeller(@RequestBody SellerRequestDTO seller) {
         return ResponseEntity.status(HttpStatus.OK).body(sellerService.updateSeller(seller));
     }
 
-    @DeleteMapping(value="/{id}")
-    public ResponseEntity<Void> deleteSeller(@PathVariable Long id) {
-        sellerService.deleteSeller(id);
+    @DeleteMapping(value="/{cnpj}")
+    public ResponseEntity<Void> deleteSeller(@PathVariable String cnpj) {
+        sellerService.deleteSeller(cnpj);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

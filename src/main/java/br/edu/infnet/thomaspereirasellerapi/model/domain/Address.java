@@ -21,7 +21,7 @@ public class Address {
     private String zipCode;
     //private String country = "Brasil";
     private String complement;
-    private int number;
+    private Integer number;
 
     public Address() {}
 
@@ -89,11 +89,11 @@ public class Address {
         this.complement = complement;
     }
 
-    public int getNumber() {
+    public Integer getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(Integer number) {
         this.number = number;
     }
 }

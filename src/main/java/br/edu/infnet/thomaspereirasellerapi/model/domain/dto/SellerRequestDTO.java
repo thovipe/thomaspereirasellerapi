@@ -6,6 +6,7 @@ public class SellerRequestDTO {
     private String email;
     private AddressRequestDTO address;
     private String cnpj;
+    private Boolean isActive;
 
     public String getName() {
         return name;
@@ -38,4 +39,14 @@ public class SellerRequestDTO {
     public void setCnpj(String cnpj) {
         this.cnpj = cnpj;
     }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+
 }
