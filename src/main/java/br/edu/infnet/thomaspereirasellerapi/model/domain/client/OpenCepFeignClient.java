@@ -1,6 +1,5 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain.client;
 
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Address;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -1,10 +1,12 @@
 package br.edu.infnet.thomaspereirasellerapi;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.*;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidItemValueException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidMonthReferenceException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidQuantityItemValueException;
+import br.edu.infnet.thomaspereirasellerapi.model.service.SellerService;
 import br.edu.infnet.thomaspereirasellerapi.model.service.StatementService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,13 +24,15 @@ class StatementServiceTest {
     private Statement statement;
     private StatementItem statementItem;
     private StatementRepository statementRepository;
+    private SellerService sellerService;
+    private SellerRepository sellerRepository;
 
     @BeforeEach
     void setUp() {
         seller = new Seller();
         statement = new Statement(seller, BigDecimal.ZERO);
         statementItem = new StatementItem("CDP01", true);
-        statementService = new StatementService(statementRepository);
+        statementService = new StatementService(statementRepository, sellerService, sellerRepository);
     }
 
     @Test

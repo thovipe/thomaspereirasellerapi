@@ -2,10 +2,15 @@ package br.edu.infnet.thomaspereirasellerapi.model.service;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementStatus;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.SellerResponseDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementResponseDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidItemValueException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidMonthReferenceException;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.InvalidQuantityItemValueException;
+import br.edu.infnet.thomaspereirasellerapi.model.exception.SellerNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.security.InvalidParameterException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -20,21 +26,56 @@ import java.util.concurrent.atomic.AtomicReference;
 public class StatementService {
 
     private final StatementRepository statementRepository;
+    private final SellerService sellerService;
+    private final SellerRepository sellerRepository;
 
-    public StatementService(StatementRepository statementRepository) {
+    public StatementService(StatementRepository statementRepository,  SellerService sellerService,  SellerRepository sellerRepository) {
         this.statementRepository = statementRepository;
+        this.sellerService = sellerService;
+        this.sellerRepository = sellerRepository;
     }
 
-    public List<Statement> getAllStatements() {
-        return statementRepository.findAll();
+    public  StatementResponseDTO copyFromStatement(Statement statement) {
+        StatementResponseDTO statementResponseDTO = new StatementResponseDTO();
+        statementResponseDTO.setId(statement.getId());
+        statementResponseDTO.setDescription(statement.getDescription());
+        statementResponseDTO.setStatus(statement.getStatus());
+        statementResponseDTO.setReference(statement.getReference());
+        statementResponseDTO.setSeller(sellerService.copyFromSeller(statement.getSeller()));
+        statementResponseDTO.setStatementItems(statement.getStatementItems());
+        return statementResponseDTO;
     }
 
-    public Statement getStatement(Long id) {
-        return statementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Statement with id %d not found", id)));
+    public Statement copyToStatement(StatementRequestDTO statementRequestDTO) {
+        Statement statement = new Statement();
+        statement.setDescription(statementRequestDTO.getDescription());
+        statement.setStatus(statementRequestDTO.getStatus());
+        statement.setReference(statementRequestDTO.getReference());
+        statement.setStatementItems(statementRequestDTO.getStatementItems());
+        statement.setSeller(sellerRepository.findSellerByCnpj(statementRequestDTO.getSellerCnpj()).orElseThrow(() -> new SellerNotFoundException("Seller not found.")));
+        return statement;
     }
 
-    public Statement addStatement(Statement statement) {
-        return statementRepository.save(statement);
+    public List<StatementResponseDTO> getAllStatements() {
+
+        List<StatementResponseDTO> statementResponseDTOs = new ArrayList<>();
+
+        for (Statement statement : statementRepository.findAll()) {
+            statementResponseDTOs.add(copyFromStatement(statement));
+        }
+
+        return statementResponseDTOs;
+    }
+
+    public StatementResponseDTO getStatement(Long id) {
+       return copyFromStatement(statementRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Statement with id %d not found", id))));
+    }
+
+    public StatementResponseDTO addStatement(StatementRequestDTO statement) {
+
+        Statement statementFromRepository = statementRepository.save(copyToStatement(statement));
+
+        return copyFromStatement(statementFromRepository);
     }
 
     public void deleteStatement(Long id) {

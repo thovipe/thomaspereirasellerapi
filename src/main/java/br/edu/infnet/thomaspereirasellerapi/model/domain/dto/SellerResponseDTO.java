@@ -1,15 +1,12 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain.dto;
 
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Address;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Seller;
-
 public class SellerResponseDTO {
 
     private Long id;
     private String name;
     private String email;
     private AddressResponseDTO address;
-    private String cpnj;
+    private String cnpj;
 
     public SellerResponseDTO() {}
 
@@ -17,7 +14,7 @@ public class SellerResponseDTO {
         this.name = name;
         this.email = email;
         this.address = address;
-        this.cpnj = cnpj;
+        this.cnpj = cnpj;
     }
 
     public Long getId() {
@@ -26,15 +23,6 @@ public class SellerResponseDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public SellerResponseDTO copyFromSeller (Seller seller) {
-        this.id = seller.getId();
-        this.name = seller.getName();
-        this.email = seller.getEmail();
-        this.address = new AddressResponseDTO(seller.getAddress().getStreetName(), seller.getAddress().getNumber().toString(), seller.getAddress().getComplement(), seller.getAddress().getDistrict(), seller.getAddress().getCity(), seller.getAddress().getState(), seller.getAddress().getZipCode());;
-        this.cpnj = seller.getCnpj();
-        return this;
     }
 
     public String getName() {
@@ -62,10 +50,10 @@ public class SellerResponseDTO {
     }
 
     public String getCpnj() {
-        return cpnj;
+        return cnpj;
     }
 
-    public void setCpnj(String cpnj) {
-        this.cpnj = cpnj;
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 }

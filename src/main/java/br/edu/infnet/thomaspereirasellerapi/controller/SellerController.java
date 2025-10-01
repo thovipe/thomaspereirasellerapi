@@ -1,6 +1,5 @@
 package br.edu.infnet.thomaspereirasellerapi.controller;
 
-import br.edu.infnet.thomaspereirasellerapi.model.domain.Seller;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.SellerRequestDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.SellerResponseDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.service.SellerService;
@@ -37,13 +36,13 @@ public class SellerController {
     }
 
     @PutMapping(value="/{id}")
-    public ResponseEntity<SellerResponseDTO> updateSeller(@RequestBody SellerRequestDTO seller) {
+    public ResponseEntity<SellerResponseDTO> updateSeller(@Valid @RequestBody SellerRequestDTO seller) {
         return ResponseEntity.status(HttpStatus.OK).body(sellerService.updateSeller(seller));
     }
 
-    @DeleteMapping(value="/{cnpj}")
-    public ResponseEntity<Void> deleteSeller(@PathVariable String cnpj) {
-        sellerService.deleteSeller(cnpj);
+    @DeleteMapping(value="/{id}")
+    public ResponseEntity<Void> deleteSeller(@PathVariable Long id) {
+        sellerService.deleteSeller(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -27,18 +27,25 @@ public class SellerService {
         this.addressService = addressService;
     }
 
+    public SellerResponseDTO copyFromSeller(Seller seller) {
+        SellerResponseDTO sellerResponseDTO = new SellerResponseDTO();
+        sellerResponseDTO.setId(seller.getId());
+        sellerResponseDTO.setName(seller.getName());
+        sellerResponseDTO.setEmail(seller.getEmail());
+        sellerResponseDTO.setAddress(new AddressResponseDTO(seller.getAddress().getStreetName(), seller.getAddress().getNumber().toString(), seller.getAddress().getComplement(), seller.getAddress().getDistrict(), seller.getAddress().getCity(), seller.getAddress().getState(), seller.getAddress().getZipCode()));
+        sellerResponseDTO.setCnpj(seller.getCnpj());
+        return sellerResponseDTO;
+    }
 
     public SellerResponseDTO getSeller(Long id)  {
         Seller seller = sellerRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Seller with id %d not found", id)));
-        return new SellerResponseDTO().copyFromSeller(seller);
+        return SellerService.this.copyFromSeller(seller);
     }
 
     public List<SellerResponseDTO> getSellers() {
         ArrayList<SellerResponseDTO> sellers = new ArrayList<>();
         for(Seller seller: sellerRepository.findAll()) {
-                    SellerResponseDTO sellerResponseDTO = new SellerResponseDTO();
-                    sellerResponseDTO.copyFromSeller(seller);
-                    sellers.add(sellerResponseDTO);
+                   sellers.add(SellerService.this.copyFromSeller(seller));
                 }
         return sellers;
     }
@@ -52,7 +59,7 @@ public class SellerService {
         newSeller.setAddress(addressService.getSellerAddress(seller.getAddress().getZipCode(), seller.getAddress().getComplement(), seller.getAddress().getNumber()));
         sellerRepository.save(newSeller);
 
-        return new SellerResponseDTO().copyFromSeller(newSeller);
+        return SellerService.this.copyFromSeller(newSeller);
     }
 
     public SellerResponseDTO addSeller(String name, String email, Address address, String cnpj) {
@@ -63,25 +70,25 @@ public class SellerService {
         seller.setCnpj(cnpj);
         seller.setActive(false);
         sellerRepository.save(seller);
-        return new SellerResponseDTO().copyFromSeller(seller);
+        return SellerService.this.copyFromSeller(seller);
     }
 
     public SellerResponseDTO activateSeller(Long id) {
         Seller sellerFromRepository = sellerRepository.findSellerById(id).orElseThrow( () -> new SellerNotFoundException("Seller with id: " +id+ " not found."));
         if (sellerFromRepository.isActive()) {
-            return new SellerResponseDTO().copyFromSeller(sellerFromRepository);
+            return SellerService.this.copyFromSeller(sellerFromRepository);
         }
         sellerFromRepository.setActive(true);
-        return new SellerResponseDTO().copyFromSeller(sellerFromRepository);
+        return SellerService.this.copyFromSeller(sellerFromRepository);
     }
 
     public SellerResponseDTO deactivateSeller(Long id) {
         Seller sellerFromRepository = sellerRepository.findSellerById(id).orElseThrow( () -> new SellerNotFoundException("Seller with id: "+id+" not found."));
         if (!sellerFromRepository.isActive()) {
-            return new SellerResponseDTO().copyFromSeller(sellerFromRepository);
+            return SellerService.this.copyFromSeller(sellerFromRepository);
         }
         sellerFromRepository.setActive(false);
-        return new  SellerResponseDTO().copyFromSeller(sellerFromRepository);
+        return SellerService.this.copyFromSeller(sellerFromRepository);
     }
 
     public SellerResponseDTO updateSeller(SellerRequestDTO seller) {
@@ -94,18 +101,18 @@ public class SellerService {
         sellerFromRepository.setActive(seller.getIsActive());
         Seller updatedSeller = sellerRepository.save(sellerFromRepository);
 
-        return new SellerResponseDTO().copyFromSeller(updatedSeller);
+        return SellerService.this.copyFromSeller(updatedSeller);
     }
 
-    public void deleteSeller(String cnpj) {
-        if(cnpj==null) {
-            throw new InvalidParameterException("Seller cnpj cannot be null");
+    public void deleteSeller(Long id) {
+        if(id==null) {
+            throw new InvalidParameterException("Seller id cannot be null");
         }
 
-        if(!sellerRepository.findSellerByCnpj(cnpj).isPresent()) {
-            throw new SellerNotFoundException("Seller with cnpj: " + cnpj + " not found.");
+        if(!sellerRepository.findSellerById(id).isPresent()) {
+            throw new SellerNotFoundException("Seller with id: " + id + " not found.");
         }
-        sellerRepository.delete(sellerRepository.findSellerByCnpj(cnpj).get());
+        sellerRepository.delete(sellerRepository.findSellerById(id).get());
     }
 
 }
