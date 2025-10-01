@@ -2,7 +2,6 @@ package br.edu.infnet.thomaspereirasellerapi.model.service;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Address;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.client.OpenCepFeignClient;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.client.OpenFeignClientViaCep;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.AddressRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.exception.AddressNotFoundException;
 import org.springframework.stereotype.Service;

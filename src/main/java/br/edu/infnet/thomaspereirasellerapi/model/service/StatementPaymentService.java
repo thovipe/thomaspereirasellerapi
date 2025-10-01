@@ -6,6 +6,8 @@ import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementPayment;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.client.CieloZeroAuthFeignClient;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.CreditCardRequestDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementPaymentRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -20,11 +22,13 @@ public class StatementPaymentService {
     private final CieloZeroAuthFeignClient cieloZeroAuthFeignClient;
     private final StatementService statementService;
     private final StatementPaymentRepository statementPaymentRepository;
+    private final SellerRepository sellerRepository;
 
-    public StatementPaymentService(CieloZeroAuthFeignClient cieloZeroAuthFeignClient, StatementService statementService,  StatementPaymentRepository statementPaymentRepository ) {
+    public StatementPaymentService(CieloZeroAuthFeignClient cieloZeroAuthFeignClient, StatementService statementService, StatementPaymentRepository statementPaymentRepository, SellerRepository sellerRepository) {
         this.cieloZeroAuthFeignClient = cieloZeroAuthFeignClient;
         this.statementService = statementService;
         this.statementPaymentRepository = statementPaymentRepository;
+        this.sellerRepository = sellerRepository;
     }
 
     public Boolean isValidCreditCard(CreditCardData cardNumber, String merchantId, String merchantKey) {
@@ -46,14 +50,14 @@ public class StatementPaymentService {
         return response.isValid();
     }
 
-    public StatementPayment createStatementPayment(Statement statement, CreditCardData cardNumber) {
-
+    public StatementPayment createStatementPayment(StatementRequestDTO statement, CreditCardData creditCard) {
+        Statement statement1 = statementService.copyToStatement(statement);
         StatementPayment statementPayment = new StatementPayment();
-        statementPayment.setStatement(statement);
-        statementPayment.setCreditCard(cardNumber);
+        statementPayment.setStatement(statement1);
+        statementPayment.setCreditCard(creditCard);
         statementPayment.setPaymentDate(LocalDateTime.now());
-        statementPayment.setSeller(statement.getSeller());
-        statementPayment.setStatementAmount(statementService.monthlyStatementCalculation(statement));
+        statementPayment.setSeller(sellerRepository.findSellerByCnpj(statement.getSellerCnpj()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seller not found")));
+        statementPayment.setStatementAmount(statementService.monthlyStatementCalculation(statement1));
 
         return statementPaymentRepository.save(statementPayment);
     }

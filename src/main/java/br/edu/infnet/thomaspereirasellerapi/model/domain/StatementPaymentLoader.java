@@ -1,5 +1,6 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementPaymentRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementRepository;
@@ -33,7 +34,7 @@ public class StatementPaymentLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
 
-        Statement statement = new Statement();
+        StatementRequestDTO statement = new  StatementRequestDTO();
         List<StatementItem> items = new ArrayList<>();
         StatementItem statementItem = new StatementItem();
         CreditCardData creditCardData = new CreditCardData();
@@ -44,7 +45,7 @@ public class StatementPaymentLoader implements ApplicationRunner {
         creditCardData.setHolderName("Aline de Souza");
         creditCardData.setSecurityCode("123");
 
-        statement.setSeller(sellerRepository.findSellerById(1L).orElseThrow(() -> new SellerNotFoundException("Seller not found")));
+        statement.setSellerCnpj("19.123.555/0001-99");
         statement.setStatus(StatementStatus.PENDING);
         statement.setDescription("Statement Payment Loader test.");
         statement.setReference(MonthReference.SEPTEMBER);
@@ -62,7 +63,8 @@ public class StatementPaymentLoader implements ApplicationRunner {
 
         System.out.println(statementPaymentService.isValidCreditCard(creditCardData, MerchantId, MerchantKey));
 
-        StatementPayment  statementPayment = statementPaymentService.createStatementPayment(statement, creditCardData);
+        StatementPayment  statementPayment;
+        statementPayment = statementPaymentService.createStatementPayment(statement, creditCardData);
 
         statementPaymentRepository.save(statementPayment);
 

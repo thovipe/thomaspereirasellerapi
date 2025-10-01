@@ -1,8 +1,7 @@
 package br.edu.infnet.thomaspereirasellerapi.model.service;
 
-import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementStatus;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.SellerResponseDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementStatus;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementResponseDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
