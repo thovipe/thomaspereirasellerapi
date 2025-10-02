@@ -5,10 +5,7 @@ import br.edu.infnet.thomaspereirasellerapi.model.domain.CreditCardData;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementPayment;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.client.CieloZeroAuthFeignClient;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.CreditCardRequestDTO;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementPaymentResponseDTO;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
-import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementResponseDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.*;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementPaymentRepository;
 import org.springframework.http.HttpStatus;
@@ -66,16 +63,15 @@ public class StatementPaymentService {
         return response.isValid();
     }
 
-    public StatementPaymentResponseDTO createStatementPayment(StatementRequestDTO statement, CreditCardData creditCard) {
-        Statement statement1 = statementService.copyToStatement(statement);
+    public StatementPaymentResponseDTO createStatementPayment(StatementPaymentRequestDTO statementPaymentRequestDTO) {
 
+        Statement statement1 = statementService.copyToStatement(statementPaymentRequestDTO.getStatement());
         StatementPayment statementPayment = new StatementPayment();
         statementPayment.setStatement(statement1);
-        statementPayment.setCreditCard(creditCard);
+        statementPayment.setCreditCard(statementPaymentRequestDTO.getCreditCard());
         statementPayment.setPaymentDate(LocalDateTime.now());
-        statementPayment.setSeller(sellerRepository.findSellerByCnpj(statement.getSellerCnpj()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seller not found")));
+        statementPayment.setSeller(statement1.getSeller());
         statementPayment.setStatementAmount(statementService.monthlyStatementCalculation(statement1));
-
         statementPaymentRepository.save(statementPayment);
         StatementPaymentResponseDTO statementPaymentResponseDTO = copyFromStatementPayment(statementPayment);
 

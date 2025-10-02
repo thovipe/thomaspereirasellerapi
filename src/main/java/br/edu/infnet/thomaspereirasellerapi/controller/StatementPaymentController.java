@@ -2,6 +2,7 @@ package br.edu.infnet.thomaspereirasellerapi.controller;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.CreditCardData;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementPayment;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementPaymentRequestDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementPaymentResponseDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.service.StatementPaymentService;
@@ -38,7 +39,7 @@ public class StatementPaymentController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<StatementPaymentResponseDTO> createStatementPayment(@RequestBody @Valid StatementRequestDTO statement, @RequestBody @Valid CreditCardData creditCard) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(statementPaymentService.createStatementPayment(statement,creditCard));
+    public ResponseEntity<StatementPaymentResponseDTO> createStatementPayment(@Valid @RequestBody StatementPaymentRequestDTO statementPaymentRequestDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(statementPaymentService.createStatementPayment(statementPaymentRequestDTO));
     }
 }

@@ -18,6 +18,8 @@ public class Statement {
     @ManyToOne(fetch = FetchType.EAGER)
     private Seller seller;
     private String description;
+
+    @Valid
     @OneToMany(cascade = CascadeType.ALL,  fetch = FetchType.EAGER, orphanRemoval = true)
     private List<StatementItem> statementItems;
     @Enumerated(EnumType.STRING)

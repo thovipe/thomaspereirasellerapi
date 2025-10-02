@@ -2,6 +2,7 @@ package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
@@ -14,6 +15,7 @@ public class StatementItem {
     @NotBlank(message="Code is a mandatory field.")
     private String itemCode;
     private Integer itemQuantity;
+    @NotNull(message = "isBillable is mandatory field.")
     private Boolean isBillable;
     private String description;
     @NotBlank(message="Name is a mandatory field.")

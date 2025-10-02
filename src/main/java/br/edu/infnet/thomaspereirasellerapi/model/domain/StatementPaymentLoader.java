@@ -1,10 +1,10 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain;
 
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementPaymentRequestDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementPaymentRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementRepository;
-import br.edu.infnet.thomaspereirasellerapi.model.exception.SellerNotFoundException;
 import br.edu.infnet.thomaspereirasellerapi.model.service.StatementPaymentService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -63,7 +63,11 @@ public class StatementPaymentLoader implements ApplicationRunner {
 
         System.out.println(statementPaymentService.isValidCreditCard(creditCardData, MerchantId, MerchantKey));
 
-        statementPaymentService.createStatementPayment(statement, creditCardData);
+        StatementPaymentRequestDTO statementPaymentRequestDTO = new StatementPaymentRequestDTO();
+        statementPaymentRequestDTO.setStatement(statement);
+        statementPaymentRequestDTO.setCreditCard(creditCardData);
+
+        statementPaymentService.createStatementPayment(statementPaymentRequestDTO);
 
     }
 }
