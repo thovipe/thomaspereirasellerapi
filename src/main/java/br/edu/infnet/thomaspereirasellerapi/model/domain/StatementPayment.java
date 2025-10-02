@@ -19,7 +19,7 @@ public class StatementPayment {
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Statement statement;
     private LocalDateTime paymentDate;
-    @ManyToOne(cascade = CascadeType.ALL,  fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(cascade = CascadeType.ALL,  fetch = FetchType.EAGER, optional = false)
     private CreditCardData creditCard;
 
     public Long getId() {

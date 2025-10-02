@@ -6,7 +6,9 @@ import br.edu.infnet.thomaspereirasellerapi.model.domain.Statement;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementPayment;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.client.CieloZeroAuthFeignClient;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.CreditCardRequestDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementPaymentResponseDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementRequestDTO;
+import br.edu.infnet.thomaspereirasellerapi.model.domain.dto.StatementResponseDTO;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.SellerRepository;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.repository.StatementPaymentRepository;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -29,6 +32,19 @@ public class StatementPaymentService {
         this.statementService = statementService;
         this.statementPaymentRepository = statementPaymentRepository;
         this.sellerRepository = sellerRepository;
+    }
+
+    public StatementPaymentResponseDTO copyFromStatementPayment(StatementPayment statementPayment) {
+
+        StatementPaymentResponseDTO statementPaymentResponseDTO = new StatementPaymentResponseDTO();
+        StatementResponseDTO statementResponseDTO = statementService.copyFromStatement(statementPayment.getStatement());
+        statementPaymentResponseDTO.setId(statementPayment.getId());
+        statementPaymentResponseDTO.setPaymentDate(statementPayment.getPaymentDate());
+        statementPaymentResponseDTO.setCreditCardData(statementPayment.getCreditCard());
+        statementPaymentResponseDTO.setStatementAmount(statementPayment.getStatementAmount());
+        statementPaymentResponseDTO.setStatement(statementResponseDTO);
+
+        return statementPaymentResponseDTO;
     }
 
     public Boolean isValidCreditCard(CreditCardData cardNumber, String merchantId, String merchantKey) {
@@ -50,8 +66,9 @@ public class StatementPaymentService {
         return response.isValid();
     }
 
-    public StatementPayment createStatementPayment(StatementRequestDTO statement, CreditCardData creditCard) {
+    public StatementPaymentResponseDTO createStatementPayment(StatementRequestDTO statement, CreditCardData creditCard) {
         Statement statement1 = statementService.copyToStatement(statement);
+
         StatementPayment statementPayment = new StatementPayment();
         statementPayment.setStatement(statement1);
         statementPayment.setCreditCard(creditCard);
@@ -59,15 +76,30 @@ public class StatementPaymentService {
         statementPayment.setSeller(sellerRepository.findSellerByCnpj(statement.getSellerCnpj()).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Seller not found")));
         statementPayment.setStatementAmount(statementService.monthlyStatementCalculation(statement1));
 
-        return statementPaymentRepository.save(statementPayment);
+        statementPaymentRepository.save(statementPayment);
+        StatementPaymentResponseDTO statementPaymentResponseDTO = copyFromStatementPayment(statementPayment);
+
+        return statementPaymentResponseDTO;
     }
 
-    public List<StatementPayment> getStatementPayments() {
-        return statementPaymentRepository.findAll();
+    public List<StatementPaymentResponseDTO> getStatementPayments() {
+
+        List<StatementPaymentResponseDTO> statementPaymentResponseDTOs = new ArrayList<>();
+
+        for(StatementPayment statementPayment : statementPaymentRepository.findAll()) {
+                StatementPaymentResponseDTO statementPaymentResponseDTO = copyFromStatementPayment(statementPayment);
+                statementPaymentResponseDTOs.add(statementPaymentResponseDTO);
+        }
+
+        return statementPaymentResponseDTOs;
     }
 
-    public StatementPayment getStatementPaymentById(Long id) {
-        return statementPaymentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Statement with id %d not found", id)));
+    public StatementPaymentResponseDTO getStatementPaymentById(Long id) {
+
+        StatementPayment statementPayment = statementPaymentRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,String.format("Statement with id %d not found", id)));
+        StatementPaymentResponseDTO statementPaymentResponseDTO = copyFromStatementPayment(statementPayment);
+
+        return statementPaymentResponseDTO;
     }
 
 

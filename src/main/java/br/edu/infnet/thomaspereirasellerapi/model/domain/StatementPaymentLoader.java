@@ -63,10 +63,7 @@ public class StatementPaymentLoader implements ApplicationRunner {
 
         System.out.println(statementPaymentService.isValidCreditCard(creditCardData, MerchantId, MerchantKey));
 
-        StatementPayment  statementPayment;
-        statementPayment = statementPaymentService.createStatementPayment(statement, creditCardData);
-
-        statementPaymentRepository.save(statementPayment);
+        statementPaymentService.createStatementPayment(statement, creditCardData);
 
     }
 }
