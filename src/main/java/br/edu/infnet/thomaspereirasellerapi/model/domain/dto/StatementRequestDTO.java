@@ -3,6 +3,8 @@ package br.edu.infnet.thomaspereirasellerapi.model.domain.dto;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.MonthReference;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementItem;
 import br.edu.infnet.thomaspereirasellerapi.model.domain.StatementStatus;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
 
@@ -10,7 +12,9 @@ public class StatementRequestDTO {
 
     private MonthReference reference;
     private String sellerCnpj;
+    @NotBlank
     private String description;
+    @Valid
     private List<StatementItem> statementItems;
     private StatementStatus status;
 

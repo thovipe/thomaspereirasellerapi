@@ -39,7 +39,7 @@ public class StatementPaymentController {
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<StatementPaymentResponseDTO> createStatementPayment(@Valid @RequestBody StatementPaymentRequestDTO statementPaymentRequestDTO) {
+    public ResponseEntity<StatementPaymentResponseDTO> createStatementPayment(@RequestBody @Valid StatementPaymentRequestDTO statementPaymentRequestDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(statementPaymentService.createStatementPayment(statementPaymentRequestDTO));
     }
 }

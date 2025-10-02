@@ -20,9 +20,8 @@ public class CreditCardData {
       private String holderName;
       private String expirationDate;
       @NotBlank(message = "Security code is mandatory field.")
-      @Max(5)
-      @Min(3)
       private String securityCode;
+
       private String brand;
 
     public String getCreditCardNumber() {

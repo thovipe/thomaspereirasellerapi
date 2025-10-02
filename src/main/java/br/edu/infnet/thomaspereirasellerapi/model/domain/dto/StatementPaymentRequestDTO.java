@@ -1,10 +1,12 @@
 package br.edu.infnet.thomaspereirasellerapi.model.domain.dto;
 
 import br.edu.infnet.thomaspereirasellerapi.model.domain.CreditCardData;
+import jakarta.validation.Valid;
 
 public class StatementPaymentRequestDTO {
-
+    @Valid
     StatementRequestDTO statement;
+    @Valid
     CreditCardData creditCard;
 
     public StatementRequestDTO getStatement() {
